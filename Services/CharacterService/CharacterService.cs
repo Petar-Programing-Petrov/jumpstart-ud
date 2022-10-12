@@ -96,6 +96,7 @@ namespace jumpstart_ud.Services.CharacterService
                 response.Success = false;
                 response.Message = ex.Message;
             }
+            //small git test
 
             return response;
         }
