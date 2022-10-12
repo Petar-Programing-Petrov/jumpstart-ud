@@ -10,6 +10,8 @@ namespace jumpstart_ud
         {
             CreateMap<Character, GetCharacterDTO>();
             CreateMap<AddCharacterDTO, Character>();
+            //To use automapper in UpdateCharacter uncomment the mapping below
+            //CreateMap<UpdateCharacterDTO, Character>();
         }
     }
 }

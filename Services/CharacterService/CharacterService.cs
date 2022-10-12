@@ -47,20 +47,58 @@ namespace jumpstart_ud.Services.CharacterService
         public async Task<ServiceResponse<GetCharacterDTO>> UpdateCharacter(UpdateCharacterDTO updatedCharacter)
         {
             ServiceResponse<GetCharacterDTO> response = new ServiceResponse<GetCharacterDTO>();
-            Character character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
 
-            character.Name = updatedCharacter.Name;
-            character.HitPoints = updatedCharacter.HitPoints;
-            character.Strength = updatedCharacter.Strength;
-            character.Defense = updatedCharacter.Defense;
-            character.Intelligence = updatedCharacter.Intelligence;
-            character.Class = updatedCharacter.Class;
+            try
+            {
+                Character character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
 
 
-            response.Data = _mapper.Map<GetCharacterDTO>(character);
+                //_mapper.Map<Character>(updatedCharacter);
+                
+                //_mapper.Map(updatedCharacter, character);
 
+                character.Name = updatedCharacter.Name;
+                character.HitPoints = updatedCharacter.HitPoints;
+                character.Strength = updatedCharacter.Strength;
+                character.Defense = updatedCharacter.Defense;
+                character.Intelligence = updatedCharacter.Intelligence;
+                character.Class = updatedCharacter.Class;
+
+
+                response.Data = _mapper.Map<GetCharacterDTO>(character);
+
+
+                
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message ;
+            }
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<GetCharacterDTO>>> DeleteCharacter(int id)
+        {
+            ServiceResponse<List<GetCharacterDTO>> response = new ServiceResponse<List<GetCharacterDTO>>();
+
+            try
+            {
+                Character character = characters.First(c => c.Id == id);
+                
+                characters.Remove(character);
+
+                response.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+    
     }
 }
