@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using jumpstart_ud.Data;
 using jumpstart_ud.DTOs.Character;
 using jumpstart_ud.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace jumpstart_ud.Services.CharacterService
 {
@@ -13,10 +15,12 @@ namespace jumpstart_ud.Services.CharacterService
         };
 
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public CharacterService(IMapper mapper)
+        public CharacterService(IMapper mapper, DataContext context)
         {
            _mapper = mapper;
+           _context = context;
         }
         public async Task<ServiceResponse<List<GetCharacterDTO>>> AddCharacter(AddCharacterDTO newCharacter)
         {
@@ -38,10 +42,11 @@ namespace jumpstart_ud.Services.CharacterService
 
         public async Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacters()
         {
-            return new ServiceResponse<List<GetCharacterDTO>> 
-            { 
-                Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList() 
-            };
+            var response = new ServiceResponse<List<GetCharacterDTO>>();
+            var dbCharacters = await _context.Characters.ToListAsync();
+            response.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+
+            return response;
         }
 
         public async Task<ServiceResponse<GetCharacterDTO>> UpdateCharacter(UpdateCharacterDTO updatedCharacter)
