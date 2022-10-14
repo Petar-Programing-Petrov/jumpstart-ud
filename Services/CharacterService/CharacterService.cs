@@ -8,12 +8,7 @@ namespace jumpstart_ud.Services.CharacterService
 {
     public class CharacterService : ICharacterService
     {
-        private static List<Character> characters = new List<Character>
-        {
-            new Character(),
-            new Character{Id= 1, Name = "Sam"  }
-        };
-
+       
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
@@ -72,7 +67,8 @@ namespace jumpstart_ud.Services.CharacterService
                                          //_mapper.Map<Character>(updatedCharacter);                
                                         //_mapper.Map(updatedCharacter, character);
 
-                //Make the changes to the character
+                //Overwriting the prop of the character
+
                 character.Name = updatedCharacter.Name;
                 character.HitPoints = updatedCharacter.HitPoints;
                 character.Strength = updatedCharacter.Strength;
@@ -80,8 +76,10 @@ namespace jumpstart_ud.Services.CharacterService
                 character.Intelligence = updatedCharacter.Intelligence;
                 character.Class = updatedCharacter.Class;
 
+                //Save the new changes to the Database
                 await _context.SaveChangesAsync();
 
+                //Return the character with the GetCharacterDTO 
                 response.Data = _mapper.Map<GetCharacterDTO>(character);
 
 
@@ -102,11 +100,15 @@ namespace jumpstart_ud.Services.CharacterService
 
             try
             {
-                Character character = characters.First(c => c.Id == id);
+                Character character = await _context.Characters.FirstAsync(c => c.Id == id);
                 
-                characters.Remove(character);
+                _context.Characters.Remove(character);
 
-                response.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+
+                await _context.SaveChangesAsync();
+
+                response.Data =  _context.Characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+
             }
             catch (Exception ex)
             {
