@@ -14,7 +14,10 @@ namespace jumpstart_ud.Controllers
         {
             _characterService = characterService;
         }
-
+        /// <summary>
+        /// Get Characters
+        /// </summary>
+        /// <returns>List of characters</returns>
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> GetAll()
         {

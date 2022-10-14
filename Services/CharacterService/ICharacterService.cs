@@ -5,6 +5,10 @@ namespace jumpstart_ud.Services.CharacterService
 {
     public interface ICharacterService
     {
+        /// <summary>
+        /// ICharacterService
+        /// </summary>
+        /// <returns>List of GetCharacterDTO</returns>
         Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacters();
 
         Task<ServiceResponse<GetCharacterDTO>> GetCharacterById(int id);

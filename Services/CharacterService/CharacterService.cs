@@ -26,17 +26,26 @@ namespace jumpstart_ud.Services.CharacterService
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>();
             Character character = _mapper.Map<Character>(newCharacter);
-            character.Id = characters.Max(c => c.Id) +1;
-            characters.Add(character);
-            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+
+            //Add the character to DataContext
+            _context.Characters.Add(character);
+
+            //Write the data in the DB
+            await _context.SaveChangesAsync();
+
+            //Return all characters from the 
+            serviceResponse.Data = await _context.Characters
+                .Select(c => _mapper.Map<GetCharacterDTO>(c))
+                .ToListAsync();
+
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetCharacterDTO>> GetCharacterById(int id)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDTO>();
-            var character = characters.FirstOrDefault(c => c.Id == id);
-            serviceResponse.Data = _mapper.Map<GetCharacterDTO>(character);
+            var dbCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
+            serviceResponse.Data = _mapper.Map<GetCharacterDTO>(dbCharacter);
             return serviceResponse;
         }
 
@@ -55,13 +64,15 @@ namespace jumpstart_ud.Services.CharacterService
 
             try
             {
-                Character character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+                //Search for the character in DB per given ID
 
+                var character = await _context.Characters
+                    .FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id);
 
-                //_mapper.Map<Character>(updatedCharacter);
-                
-                //_mapper.Map(updatedCharacter, character);
+                                         //_mapper.Map<Character>(updatedCharacter);                
+                                        //_mapper.Map(updatedCharacter, character);
 
+                //Make the changes to the character
                 character.Name = updatedCharacter.Name;
                 character.HitPoints = updatedCharacter.HitPoints;
                 character.Strength = updatedCharacter.Strength;
@@ -69,6 +80,7 @@ namespace jumpstart_ud.Services.CharacterService
                 character.Intelligence = updatedCharacter.Intelligence;
                 character.Class = updatedCharacter.Class;
 
+                await _context.SaveChangesAsync();
 
                 response.Data = _mapper.Map<GetCharacterDTO>(character);
 
