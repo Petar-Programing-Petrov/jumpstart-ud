@@ -14,5 +14,9 @@
 
         public RpgClass Class { get; set; } = RpgClass.Knight;
 
+
+        //relation
+        public User? User { get; set; }
+
     }
 }
