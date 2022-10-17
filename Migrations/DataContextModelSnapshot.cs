@@ -56,7 +56,7 @@ namespace jumpstart_ud.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Characters");
+                    b.ToTable("Characters", (string)null);
                 });
 
             modelBuilder.Entity("jumpstart_ud.Models.User", b =>
@@ -81,7 +81,7 @@ namespace jumpstart_ud.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("jumpstart_ud.Models.Character", b =>
