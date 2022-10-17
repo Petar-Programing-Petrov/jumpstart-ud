@@ -8,5 +8,8 @@
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
 
+        //Relation
+        public List<Character>? Characters { get; set; }
+
     }
 }
