@@ -1,10 +1,12 @@
 ﻿using jumpstart_ud.DTOs.Character;
 using jumpstart_ud.Models;
 using jumpstart_ud.Services.CharacterService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace jumpstart_ud.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CharacterController : ControllerBase
@@ -17,7 +19,7 @@ namespace jumpstart_ud.Controllers
         /// <summary>
         /// Get all characters
         /// </summary>
-        /// <returns>List of characters</returns>
+        /// <returns>List of characters</returns>        
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> GetAll()
         {
