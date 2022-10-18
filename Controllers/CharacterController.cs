@@ -3,6 +3,7 @@ using jumpstart_ud.Models;
 using jumpstart_ud.Services.CharacterService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace jumpstart_ud.Controllers
 {
@@ -23,6 +24,11 @@ namespace jumpstart_ud.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> GetAll()
         {
+            //Getting the user Id from ControllerBase Claims 
+            //int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            
+            
+            
             return Ok(await _characterService.GetAllCharacters());
         }
         /// <summary>
