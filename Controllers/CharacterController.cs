@@ -1,10 +1,13 @@
 ﻿using jumpstart_ud.DTOs.Character;
 using jumpstart_ud.Models;
 using jumpstart_ud.Services.CharacterService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace jumpstart_ud.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CharacterController : ControllerBase
@@ -14,19 +17,35 @@ namespace jumpstart_ud.Controllers
         {
             _characterService = characterService;
         }
-
+        /// <summary>
+        /// Get all characters
+        /// </summary>
+        /// <returns>List of characters</returns>        
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> GetAll()
         {
+            //Getting the user Id from ControllerBase Claims 
+            //int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            
+            
+            
             return Ok(await _characterService.GetAllCharacters());
         }
-
+        /// <summary>
+        /// Get the character by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Character by his id</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> GetSingle(int id)
         {
             return Ok(await _characterService.GetCharacterById(id));
         }
-
+        /// <summary>
+        /// Delete character by his id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Delete(int id)
         {
@@ -42,7 +61,11 @@ namespace jumpstart_ud.Controllers
         {
             return Ok(await _characterService.AddCharacter(newCharacter));
         }
-
+        /// <summary>
+        /// Edit character
+        /// </summary>
+        /// <param name="updateCharacter"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> AddCharacter(UpdateCharacterDTO updateCharacter)
         {
