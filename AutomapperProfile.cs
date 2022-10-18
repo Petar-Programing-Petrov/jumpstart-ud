@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using jumpstart_ud.DTOs.Character;
+using jumpstart_ud.DTOs.Skill;
 using jumpstart_ud.DTOs.Weapon;
 using jumpstart_ud.Models;
 
@@ -14,6 +15,7 @@ namespace jumpstart_ud
             //To use automapper in UpdateCharacter uncomment the mapping below
             //CreateMap<UpdateCharacterDTO, Character>();
             CreateMap<Weapon, GetWeaponDTO>();
+            CreateMap<Skill, GetSkillDTO>();
             
         }
     }

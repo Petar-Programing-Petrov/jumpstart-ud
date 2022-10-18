@@ -9,16 +9,16 @@ namespace jumpstart_ud.Services.CharacterService
 {
     public class CharacterService : ICharacterService
     {
-       
+
         private readonly IMapper _mapper;
         private readonly DataContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CharacterService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
-           _mapper = mapper;
-           _context = context;
-           _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -65,6 +65,8 @@ namespace jumpstart_ud.Services.CharacterService
         {
             var serviceResponse = new ServiceResponse<GetCharacterDTO>();
             var dbCharacter = await _context.Characters
+                .Include(c => c.Weapon)
+                .Include(c => c.Skills)
                 .FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUSerId());
             serviceResponse.Data = _mapper.Map<GetCharacterDTO>(dbCharacter);
             return serviceResponse;
@@ -74,6 +76,8 @@ namespace jumpstart_ud.Services.CharacterService
         {
             var response = new ServiceResponse<List<GetCharacterDTO>>();
             var dbCharacters = await _context.Characters
+                .Include(c => c.Weapon)
+                .Include(c => c.Skills)
                 .Where(c => c.User.Id == GetUSerId())
                 .ToListAsync();
             response.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
@@ -95,7 +99,7 @@ namespace jumpstart_ud.Services.CharacterService
                 //_mapper.Map<Character>(updatedCharacter);                
                 //_mapper.Map(updatedCharacter, character);
 
-                
+
                 //Check if the character.User.Id is same as the logged user
 
                 if (character.User.Id == GetUSerId())
@@ -120,12 +124,12 @@ namespace jumpstart_ud.Services.CharacterService
                     response.Success = false;
                     response.Message = "Character not found!";
                 }
-                
+
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message ;
+                response.Message = ex.Message;
             }
 
             return response;
@@ -140,7 +144,7 @@ namespace jumpstart_ud.Services.CharacterService
                 Character character = await _context.Characters
                     .FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUSerId());
 
-                if (character !=  null)
+                if (character != null)
                 {
                     _context.Characters.Remove(character);
                     await _context.SaveChangesAsync();
@@ -165,6 +169,50 @@ namespace jumpstart_ud.Services.CharacterService
 
             return response;
         }
-    
+
+        public async Task<ServiceResponse<GetCharacterDTO>> AddCharacterSkill(AddCharacterSkillDTO newCharacterSkill)
+        {
+            var response = new ServiceResponse<GetCharacterDTO>();
+
+            try
+            {
+                var character = await _context.Characters
+                    .Include(c => c.Weapon)
+                    .Include(c => c.Skills)
+                    .FirstOrDefaultAsync(c => c.Id == newCharacterSkill.CharacterId &&
+                    c.User.Id == GetUSerId());
+
+                if (character == null)
+                {
+                    response.Success = false;
+                    response.Message = "Character not found!";
+                    return response;
+                }
+
+                var skill = await _context.Skills.FirstOrDefaultAsync(s => s.Id == newCharacterSkill.SkillId);
+
+                if (skill == null)
+                {
+                    response.Success = false;
+                    response.Message = "Skill not found!";
+                    return response;
+
+                }
+                character.Skills.Add(skill);
+
+                await _context.SaveChangesAsync();
+                response.Data = _mapper.Map<GetCharacterDTO>(character);
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+
+            }
+            return response;
+
+
+        }
     }
 }

@@ -18,5 +18,8 @@ namespace jumpstart_ud.Services.CharacterService
         Task<ServiceResponse<GetCharacterDTO>> UpdateCharacter(UpdateCharacterDTO updatedCharacter);
 
         Task<ServiceResponse<List<GetCharacterDTO>>> DeleteCharacter(int id);
+        Task<ServiceResponse<GetCharacterDTO>> AddCharacterSkill(AddCharacterSkillDTO addCharacterSkill);
+
+
     }
 }
