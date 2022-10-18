@@ -18,5 +18,6 @@
         //relation
         public User? User { get; set; }
 
+        public Weapon Weapon { get; set; }
     }
 }
