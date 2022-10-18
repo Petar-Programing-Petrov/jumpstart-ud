@@ -1,5 +1,6 @@
 using jumpstart_ud.Data;
 using jumpstart_ud.Services.CharacterService;
+using jumpstart_ud.Services.WeaponService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +31,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IWeaponService, WeaponService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
