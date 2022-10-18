@@ -1,4 +1,5 @@
 ﻿
+using jumpstart_ud.DTOs.Weapon;
 using jumpstart_ud.Models;
 
 namespace jumpstart_ud.DTOs.Character
@@ -16,5 +17,7 @@ namespace jumpstart_ud.DTOs.Character
         public int Intelligence { get; set; } = 10;
 
         public RpgClass Class { get; set; } = RpgClass.Knight;
+
+        public GetWeaponDTO Weapon { get; set; }
     }
 }

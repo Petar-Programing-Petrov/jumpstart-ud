@@ -13,8 +13,8 @@ namespace jumpstart_ud
             CreateMap<AddCharacterDTO, Character>();
             //To use automapper in UpdateCharacter uncomment the mapping below
             //CreateMap<UpdateCharacterDTO, Character>();
-            CreateMap<Weapon, GetCharacterDTO>();
-            CreateMap<Weapon, AddWeaponDTO>();
+            CreateMap<Weapon, GetWeaponDTO>();
+            
         }
     }
 }
